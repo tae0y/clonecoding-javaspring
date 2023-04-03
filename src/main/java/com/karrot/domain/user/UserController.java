@@ -1,4 +1,4 @@
-package main.java.com.karrot.domain.user;
+package com.karrot.domain.user;
 
 public class UserController {
 }
