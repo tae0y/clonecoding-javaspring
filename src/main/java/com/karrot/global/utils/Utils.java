@@ -1,4 +1,4 @@
-package main.java.com.karrot.global.utils;
+package com.karrot.global.utils;
 
 public class Utils {
 }
