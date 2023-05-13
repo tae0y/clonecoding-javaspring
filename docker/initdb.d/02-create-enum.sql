@@ -1,0 +1,12 @@
+BEGIN;
+
+CREATE TYPE status_type
+AS ENUM ('STAT1', 'STAT2', 'STAT3');
+
+CREATE TYPE noti_type
+AS ENUM ('NOTI1', 'NOTI2', 'NOTI3');
+
+CREATE TYPE users_role_type
+AS ENUM ('ROLE1', 'ROLE2', 'ROLE3');
+
+END;
