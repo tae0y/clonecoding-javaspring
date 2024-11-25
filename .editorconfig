@@ -1,0 +1,29 @@
+root = true
+
+# All files
+[*]
+#### Core EditorConfig Options ####
+# Indentation and spacing
+indent_style = space
+indent_size = 4
+tab_width = 4
+
+# New line preferences
+end_of_line = crlf
+insert_final_newline = false
+
+# XML files
+[*.{xml,csproj,props,targets,config}]
+indent_size = 2
+
+# JSON files
+[*.{json,jsonc}]
+indent_size = 2
+
+# YAML files
+[*.{yaml,yml}]
+indent_size = 2
+
+# Bidep files
+[*.{bicep}]
+indent_size = 2
