@@ -2,12 +2,19 @@ package com.karrot.domain.user;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+@Entity
+@Table(name="user")
 @Data
 @Schema(name = "User", description = "사용자 정보")
 public class User {
+    @Id
     @Schema(name = "ID", description = "사용자 ID")
     private Long id;
     @Schema(name = "이름", description = "사용자 이름")
