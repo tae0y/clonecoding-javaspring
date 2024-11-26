@@ -1,5 +1,13 @@
 # README
 
+## 깃 사용규칙
+- main : 운영배포라 생각하고 병합
+- dev : 분기된 브랜치를 여기서 통합테스트 진행가능
+- pull request : 등록된 이슈 제목으로 등록
+- merge : 스쿼시 머지
+- branch name : 등록된 이슈번호/제목 사용
+- commit message : create, update, delete prefix를 달고 그외 자유
+
 ## 12월까지 목표
 - 사용자관점
   - 사용자는 상품을 등록, 조회, 수정, 삭제할 수 있다.
