@@ -10,8 +10,7 @@ docker compose up
 - pgadmin은 `localhost:5050`처럼 로컬호스트로 접속한다.
 - pgadmin에서 db에 접속할때는 아래 명령어로 IP를 확인한다.
 ```shell
-docker ps | grep pg_container | awk '{print $1}'
-docker inspect af84 | grep IPAddress
+docker inspect $(docker ps | grep pg_container | awk '{print $1}') | grep IPAddress
 ```
 
 postgis등 관련 라이브러리 설치를 위해 도커 빌드파일을 구성해줬다.
@@ -25,3 +24,6 @@ CMD ["/usr/local/bin/docker-entrypoint.sh","postgres"]
 ```shell
 apt-get update && apt-get install -y postgresql-15-postgis-3
 ```
+
+- 이미지 갱신은 `docker compose down`
+- 볼륨 갱신은 `docker compose down -v`

@@ -1,8 +1,9 @@
 version: '3.8'
+name: karrot-docker
 services:
-  db:
-    container_name: pg_container
-#    image: postgres
+  karrot_pg_container:
+    #container_name: karrot_pg_container
+    #image: postgres
     build:
       context: .
       dockerfile: Dockerfile-db
@@ -15,8 +16,8 @@ services:
       - "5432:5432"
     volumes:
       - ./initdb.d:/docker-entrypoint-initdb.d
-  pgadmin:
-    container_name: pgadmin4_container
+  karrot_pgadmin4_container:
+    #container_name: karrot_pgadmin4_container
     image: dpage/pgadmin4
     restart: always
     environment:

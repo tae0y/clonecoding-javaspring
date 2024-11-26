@@ -2,6 +2,15 @@
 -- Please log an issue at https://redmine.postgresql.org/projects/pgadmin4/issues/new if you find any bugs, including reproduction steps.
 BEGIN;
 
+-- sample
+CREATE TABLE IF NOT EXISTS public.employee
+(
+    id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(255),
+    birthday DATE
+);
+
+-- real
 CREATE TABLE IF NOT EXISTS public.activity_areas
 (
     user_id bigint NOT NULL,
