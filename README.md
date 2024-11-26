@@ -1,19 +1,16 @@
-# Target Platfrom
-We are aiming to build [the Karrot market](https://uk.karrotmarket.com/).
+# README
 
-<p>
-  <img src="https://user-images.githubusercontent.com/49010295/233778669-31594a69-7139-42b9-8bd5-a6652a158d94.jpg" width="200">
-  <img src="https://user-images.githubusercontent.com/49010295/233778782-904e43a8-2dc7-4cce-baf0-d825f86c9ce9.jpg" width="200">
-  <img src="https://user-images.githubusercontent.com/49010295/233778764-46e0e5aa-b3c1-43fd-8a7f-631d1291eb3a.jpg" width="200">
-  <img src="https://user-images.githubusercontent.com/49010295/233778832-ba2d36f8-626c-44b1-a200-3d7b29ce3a5c.jpg" width="200">
-</p>
+## 12월까지 목표
+- 사용자관점
+  - 사용자는 상품을 등록, 조회, 수정, 삭제할 수 있다.
+  - 사용자는 상품을 다른 사용자와 거래할 수 있다.
+  - 사용자는 지정된 위치정보를 기준으로 상품을 조회할 수 있다.
+- 운영관점
+  - 프로필별로 인메모리H2, 도커PostgreSQL에 연결할 수 있다
+  - 단위테스트시에는 테스트용 일회용 도커컨테이너를 사용할 수 있다
+  - OpenAPI를 사용해 API를 사전 설계한다.
 
-
-<p>
-  <img src="https://user-images.githubusercontent.com/49010295/233778912-9cbae0f1-a327-49ba-91c4-ca9d93338036.jpg" width="200">
-  <img src="https://user-images.githubusercontent.com/49010295/233778941-480ff234-5e7b-4fc5-a96e-72ccc32a0a28.jpg" width="200">
-  <img src="https://user-images.githubusercontent.com/49010295/233778924-af580334-4e06-4c65-871b-3156ad7c8467.jpg" width="200">
-</p>
-
-### User story
-- https://github.com/spring-toy-project-2023/karrot-market/wiki/user-story2
+## 장기 목표
+- 모노레포로 MSA를 동시에 빌드/운영 (가능하다면 aspire 적용)
+- RabbitMQ, Kafka, ProtoBuf 등 사용한 인터페이스 로직
+- 알림 발송을 위한 배치서비스
