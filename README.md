@@ -1,18 +1,30 @@
 # README
 
 - build/run
+```shell
+# 빌드, 앱 실행
+mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-```
+- swagger openAPI
+  - `http://localhost:8080/swagger-ui`로 접속해서 확인
+  - port, swagger endpoint는 application.yml 확인
 
-- swagger
-```
 
-```
+- lint, unit test
+```shell
+# spectral lint
+mvn spring-boot:run -Dspring-boot.run.profiles=local &
+APP_PID=$!
+sleep 10
+rm -f swagger.json
+curl http://localhost:8080/v3/api-docs -o swagger.json
+spectral lint swagger.json #spectral lint -f json -F warn -D -q swagger.json | ConvertFrom-Json
+kill $APP_PID
+rm -f swagger.json
 
-- unit test
-```
-
+# 단위테스트
+mvn test
 ```
 
 
