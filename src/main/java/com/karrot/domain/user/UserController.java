@@ -24,13 +24,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "User", description = "사용자 정보")
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @Operation(summary ="Create User", description = "Create User!")
-    @PostMapping("/users")
+    @PostMapping("/")
     @ApiResponses(
         value = {
             //TODO : [개선] 응답코드에 따라 객체 언마샬 로직이 분기를 타야함. responseCode, responseMessage, responseSchema를 포함한 객체를 반환하도록 수정
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @Operation(summary ="Get User", description = "Return all Users")
-    @GetMapping("/users")
+    @GetMapping("/")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "Get User Success", content = @Content(schema = @Schema(implementation = Users.class))),
@@ -64,7 +64,7 @@ public class UserController {
 
     @Operation(summary ="Get User", description = "Return User by ID")
     @Parameter(name = "id", description = "사용자 ID", required = true)
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "Get User Success", content = @Content(schema = @Schema(implementation = Users.class))),
@@ -84,7 +84,7 @@ public class UserController {
 
     @Operation(summary ="Put User", description = "Update User by ID")
     @Parameter(name = "id", description = "사용자 ID", required = true)
-    @PutMapping("/users/{id}")
+    @PutMapping("/{id}")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "Update User Success", content = @Content(schema = @Schema(implementation = Users.class))),
@@ -107,7 +107,7 @@ public class UserController {
 
     @Operation(summary ="Delete User", description = "Delete User by ID")
     @Parameter(name = "id", description = "사용자 ID", required = true)
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "Update User Success", content = @Content(schema = @Schema(implementation = Users.class))),
