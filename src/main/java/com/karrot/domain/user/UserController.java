@@ -13,14 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
-@Api(tags = "User", description = "사용자 정보")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -29,14 +24,6 @@ public class UserController {
 
     @Operation(summary ="Create User", description = "Create User!")
     @PostMapping("/users")
-    @ApiOperation(value = "Create User", notes = "Create User")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(code = 201, message = "Created", response = User.class),
-                    @ApiResponse(code = 403, message = "Forbidden", response = String.class),
-                    @ApiResponse(code = 500, message = "Internal Server Error", response = String.class)
-            }
-    )
     public ResponseEntity<User> createUser(@RequestBody User user) {
         throw new NotYetImplementedException();
         //HttpStatus status = HttpStatus.CREATED;
