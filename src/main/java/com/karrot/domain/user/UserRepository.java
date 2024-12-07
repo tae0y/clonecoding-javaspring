@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<Users, Long> {
 
-    public User findByName(String name);
+    public Users findByName(String name);
 
-    public List<User> findAll();
+    public List<Users> findAll();
 
 }

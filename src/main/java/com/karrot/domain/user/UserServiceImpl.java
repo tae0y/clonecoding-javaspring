@@ -16,12 +16,12 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User getEmployeeById(Long id) {
+    public Users getEmployeeById(Long id) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public User getEmployeeByName(String name) {
+    public Users getEmployeeByName(String name) {
         throw new NotYetImplementedException();
     }
 
@@ -31,12 +31,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
+    public Users save(Users user) {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<Users> getAllUsers() {
         throw new NotYetImplementedException();
     }
 }

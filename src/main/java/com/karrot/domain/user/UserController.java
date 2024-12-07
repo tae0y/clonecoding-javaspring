@@ -2,7 +2,6 @@ package com.karrot.domain.user;
 
 import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "User", description = "사용자 정보")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -24,7 +31,17 @@ public class UserController {
 
     @Operation(summary ="Create User", description = "Create User!")
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    @ApiResponses(
+        value = {
+            //TODO : [개선] 응답코드에 따라 객체 언마샬 로직이 분기를 타야함. responseCode, responseMessage, responseSchema를 포함한 객체를 반환하도록 수정
+            @ApiResponse(responseCode = "201", description = "Create User Succeess", content = @Content(examples={}, schema = @Schema(implementation = Users.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Invalid input")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Forbidden")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "409", description = "User already exists", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="User Already exists")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "503", description = "Internal server error", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Internal server error")}, schema = @Schema(implementation = String.class)))
+        }
+    )
+    public ResponseEntity<Users> createUser(@RequestBody Users user) {
         throw new NotYetImplementedException();
         //HttpStatus status = HttpStatus.CREATED;
         //User saved = userService.save(user);
@@ -33,14 +50,32 @@ public class UserController {
 
     @Operation(summary ="Get User", description = "Return all Users")
     @GetMapping("/users")
-    public List<User> getAllUsers() {
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "Get User Success", content = @Content(schema = @Schema(implementation = Users.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Forbidden")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "503", description = "Internal server error", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Internal server error")}, schema = @Schema(implementation = String.class)))
+        }
+    )
+    public List<Users> getAllUsers() {
         throw new NotYetImplementedException();
         //return userService.getAllUsers();
     }
 
     @Operation(summary ="Get User", description = "Return User by ID")
+    @Parameter(name = "id", description = "사용자 ID", required = true)
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "Get User Success", content = @Content(schema = @Schema(implementation = Users.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Invalid input")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Forbidden")}, schema = @Schema(implementation = String.class))),
+            //user not found로 사용자 존재여부를 추정할 수 있음, 보안을 위해 제거하는게 좋을까?
+            @ApiResponse(responseCode = "404", description = "User not found", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="User not found")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "503", description = "Internal server error", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Internal server error")}, schema = @Schema(implementation = String.class)))
+        }
+    )
+    public ResponseEntity<Users> getUser(@PathVariable Long id) {
         throw new NotYetImplementedException();
         //return userService.getUser(id)
         //        .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
@@ -48,8 +83,18 @@ public class UserController {
     }
 
     @Operation(summary ="Put User", description = "Update User by ID")
+    @Parameter(name = "id", description = "사용자 ID", required = true)
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "Update User Success", content = @Content(schema = @Schema(implementation = Users.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Invalid input")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Forbidden")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="User not found")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "503", description = "Internal server error", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Internal server error")}, schema = @Schema(implementation = String.class)))
+        }
+    )
+    public ResponseEntity<Users> updateUser(@PathVariable Long id, @RequestBody Users user) {
         throw new NotYetImplementedException();
         //return userService.getUser(id)
         //        .map(existingUser -> {
@@ -61,7 +106,17 @@ public class UserController {
     }
 
     @Operation(summary ="Delete User", description = "Delete User by ID")
+    @Parameter(name = "id", description = "사용자 ID", required = true)
     @DeleteMapping("/users/{id}")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "Update User Success", content = @Content(schema = @Schema(implementation = Users.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Invalid input")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Forbidden")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="User not found")}, schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "503", description = "Internal server error", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Internal server error")}, schema = @Schema(implementation = String.class)))
+        }
+    )
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         throw new NotYetImplementedException();
         //return userService.getUser(id)

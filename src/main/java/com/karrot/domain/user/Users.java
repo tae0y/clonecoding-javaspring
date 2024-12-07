@@ -10,10 +10,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Entity
-@Table(name="user")
+@Table(name="users")
 @Data
 @Schema(name = "User", description = "사용자 정보")
-public class User {
+public class Users {
     @Id
     @Schema(name = "id", description = "사용자 ID")
     private Long id;

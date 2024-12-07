@@ -7,16 +7,16 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.karrot.domain.user.User;
+import com.karrot.domain.user.Users;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 @Data
 @Schema(name = "Transaction", description = "거래 정보")
-public class Transaction {
+public class Transactions {
     @Id
     @Schema(name = "id", description = "거래 ID")
     private Long id;
@@ -42,23 +42,24 @@ public class Transaction {
     @Schema(name = "isDeleted", description = "거래 삭제여부")
     private boolean isDeleted;
 
+    //TODO: createdUserId인지, createUsers로 할지 고민 필요
     @ManyToOne
     @Schema(name = "createUser", description = "상품을 등록한 사용자 정보")
-    private User createUser;
+    private Users createUser;
 
     @Schema(name = "createdDateTime", description = "상품 등록일시")
     private LocalDateTime createdDateTime;
 
     @ManyToOne
     @Schema(name = "modifyUser", description = "상품을 수정한 사용자 정보")
-    private User modifyUser;
+    private Users modifyUser;
 
     @Schema(name = "modifiedDateTime", description = "상품 수정일시")
     private LocalDateTime modifiedDateTime;
 
     @ManyToOne
     @Schema(name = "deleteUser", description = "상품을 삭제한 사용자 정보")
-    private User deleteUser;
+    private Users deleteUser;
 
     @Schema(name = "deletedDateTime", description = "상품 삭제일시")
     private LocalDateTime deletedDateTime;
