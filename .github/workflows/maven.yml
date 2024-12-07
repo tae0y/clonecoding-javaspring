@@ -16,7 +16,7 @@ on:
       - 'feat/*'
     paths-ignore:
       - 'README.md'
-      - '.github/**'
+      #- '.github/**'
       - 'docker/**'
       - '.*'
   pull_request:
