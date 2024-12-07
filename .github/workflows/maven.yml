@@ -10,18 +10,14 @@ name: Java CI with Maven
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
-      - 'feature/*'
-      - 'feat/*'
+      - "main"
     paths-ignore:
       - 'README.md'
       #- '.github/**'
       - 'docker/**'
       - '.*'
-  pull_request:
-    branches:
-      - "main"
 
 jobs:
   build:
