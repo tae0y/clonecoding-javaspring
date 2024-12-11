@@ -42,7 +42,7 @@ jobs:
           ${{ runner.os }}-maven-
 
     - name : Install Dependencies only
-      run: mvn -B -DskipTests=true
+      run: mvn -B install -DskipTests=true
 
     - name : Run unit tests
       run: mvn -B test
