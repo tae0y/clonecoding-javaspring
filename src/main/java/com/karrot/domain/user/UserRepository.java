@@ -10,8 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserRepository extends JpaRepository<Users, Long> {
 
-    public Users findByName(String name);
+    public Users createUser(Users user);
 
-    public List<Users> findAll();
+    public List<Users> getAllUsers();
 
+    public Users getUser(Long id);
+
+    public Users updateUser(Long id, Users user);
+
+    public void deleteUser(Long id);
 }

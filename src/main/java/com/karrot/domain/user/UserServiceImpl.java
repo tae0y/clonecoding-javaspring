@@ -16,27 +16,32 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public Users getEmployeeById(Long id) {
+    public Users createUser(Users user)
+    {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public Users getEmployeeByName(String name) {
+    public List<Users> getAllUsers()
+    {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public boolean exists(String name) {
+    public Users getUser(Long id)
+    {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public Users save(Users user) {
+    public Users updateUser(Long id, Users user)
+    {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public List<Users> getAllUsers() {
+    public void deleteUser(Long id)
+    {
         throw new NotYetImplementedException();
     }
 }

@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface UserService {
 
-    public Users getEmployeeById(Long id);
-
-    public Users getEmployeeByName(String name);
+    public Users createUser(Users user);
 
     public List<Users> getAllUsers();
 
-    public boolean exists(String name);
+    public Users getUser(Long id);
 
-    public Users save(Users employee);
+    public Users updateUser(Long id, Users user);
+
+    public void deleteUser(Long id);
 }
