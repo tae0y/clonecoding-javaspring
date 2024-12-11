@@ -33,5 +33,16 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name : Install Dependencies only
+      run: mvn -B -DskipTests=true
+
     - name : Run unit tests
       run: mvn -B test
