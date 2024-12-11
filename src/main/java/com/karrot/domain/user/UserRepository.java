@@ -1,6 +1,7 @@
 package com.karrot.domain.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,13 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserRepository extends JpaRepository<Users, Long> {
 
-    public Users createUser(Users user);
+    //TODO: JPA 이름규칙에 맞춰 수정하기
+    public Users save(Users user);
 
-    public List<Users> getAllUsers();
+    public List<Users> findAll();
 
-    public Users getUser(Long id);
+    public Optional<Users> findById(Long id);
 
-    public Users updateUser(Long id, Users user);
+    //public Users updateById(Long id, Users user);
 
-    public void deleteUser(Long id);
+    public void deleteById(Long id);
 }

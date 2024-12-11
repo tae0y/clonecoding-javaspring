@@ -41,6 +41,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
 
+    # TODO: mvn lifecycle에 맞춰 배포 단계, spectral 검증 단계 추가
     - name : Install Dependencies only
       run: mvn -B install -DskipTests=true
 

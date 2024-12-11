@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 public class UserControllerOpenApiTest {
     //스프링 전체 컨텍스트 로드가 필요해서 단위테스트를 분리함
 
@@ -70,6 +72,35 @@ public class UserControllerOpenApiTest {
         //when and then
         JsonNode swagger = new ObjectMapper().readTree(response.getBody());
         JsonNode createUserRoot = swagger.get("paths").get("/api/users/").get("get");
+        assertNotNull(createUserRoot.get("tags"));
+        assertNotNull(createUserRoot.get("summary"));
+        assertNotNull(createUserRoot.get("description"));
+        assertNotNull(createUserRoot.get("operationId"));
+
+        //JsonNode createUserRequestBody = createUserRoot.get("requestBody");
+        //assertNotNull(createUserRequestBody.get("content"));
+
+        JsonNode createUserResponses = createUserRoot.get("responses");
+        assertNotNull(createUserResponses.get("200"));
+        assertNotNull(createUserResponses.get("403"));
+        assertNotNull(createUserResponses.get("503"));
+    }
+
+    /**
+     * <ul>
+     * <li> name : givenSwaggerDocs_whenGetUser_thenShouldIncludeEssentialFields
+     * <li> desc : getuser OpenAPI 문서에 필수 필드가 포함되어야 함
+     * </ul>
+     */
+    @Test
+    public void givenSwaggerDocs_whenGetUser_thenShouldIncludeEssentialFields() throws Exception {
+        //given
+        ResponseEntity<String> response = restTemplate.getForEntity("/v3/api-docs", String.class);
+        assertEquals(200, response.getStatusCodeValue());
+
+        //when and then
+        JsonNode swagger = new ObjectMapper().readTree(response.getBody());
+        JsonNode createUserRoot = swagger.get("paths").get("/api/users/{id}").get("get");
         assertNotNull(createUserRoot.get("tags"));
         assertNotNull(createUserRoot.get("summary"));
         assertNotNull(createUserRoot.get("description"));
