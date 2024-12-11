@@ -24,9 +24,10 @@ public class UserControllerOpenApiTest {
 
     //TODO: OpenAPI 스펙에 대한 단위테스트
     /**
-     * name : givenSwaggerDocs_whenCreateUser_thenShouldIncludeEssentialFields
-     * desc : createUser OpenAPI 문서에 필수 필드가 포함되어야 함
-     * 
+     * <ul>
+     * <li> name : givenSwaggerDocs_whenCreateUser_thenShouldIncludeEssentialFields
+     * <li> desc : createUser OpenAPI 문서에 필수 필드가 포함되어야 함
+     * </ul>
      */
     @Test
     public void givenSwaggerDocs_whenCreateUser_thenShouldIncludeEssentialFields() throws Exception {
@@ -55,9 +56,10 @@ public class UserControllerOpenApiTest {
     }
 
     /**
-     * name : givenSwaggerDocs_whenGetAllUsers_thenShouldIncludeEssentialFields
-     * desc : getAllUsers OpenAPI 문서에 필수 필드가 포함되어야 함
-     * 
+     * <ul>
+     * <li> name : givenSwaggerDocs_whenGetAllUsers_thenShouldIncludeEssentialFields
+     * <li> desc : getAllUsers OpenAPI 문서에 필수 필드가 포함되어야 함
+     * </ul>
      */
     @Test
     public void givenSwaggerDocs_whenGetAllUsers_thenShouldIncludeEssentialFields() throws Exception {
@@ -83,9 +85,10 @@ public class UserControllerOpenApiTest {
     }
 
     /**
-     * name : givenSwaggerDocs_whenUpdateUser_thenShouldIncludeEssentialFields
-     * desc : updateUser OpenAPI 문서에 필수 필드가 포함되어야 함
-     * 
+     * <ul>
+     * <li> name : givenSwaggerDocs_whenUpdateUser_thenShouldIncludeEssentialFields
+     * <li> desc : updateUser OpenAPI 문서에 필수 필드가 포함되어야 함
+     * </ul>
      */
     @Test
     public void givenSwaggerDocs_whenUpdateUser_thenShouldIncludeEssentialFields() throws Exception {
@@ -113,9 +116,10 @@ public class UserControllerOpenApiTest {
     }
 
     /**
-     * name : givenSwaggerDocs_whenDeleteUser_thenShouldIncludeEssentialFields
-     * desc : deleteUser OpenAPI 문서에 필수 필드가 포함되어야 함
-     * 
+     * <ul>
+     * <li> name : givenSwaggerDocs_whenDeleteUser_thenShouldIncludeEssentialFields
+     * <li> desc : deleteUser OpenAPI 문서에 필수 필드가 포함되어야 함
+     * </ul>
      */
     @Test
     public void givenSwaggerDocs_whenDeleteUser_thenShouldIncludeEssentialFields() throws Exception {

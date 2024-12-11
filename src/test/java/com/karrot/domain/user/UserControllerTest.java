@@ -33,6 +33,7 @@ public class UserControllerTest {
     private MockMvc mvc;
 
     //TODO: service 구현 이후에는 의존성 mock 객체 주입후 테스트
+    //TODO: @WebMvcTest controllers=UserController.class, 설정해서 실제 구현을 바라보고 테스트
     @MockBean
     private UserController userController;
 
@@ -42,9 +43,10 @@ public class UserControllerTest {
     // TODO: Controller 구현 로직에 대한 단위테스트
     // TODO: [착안] swagger docs, unittest docs 어느쪽이 좋을까? https://jaeseo0519.tistory.com/406
     /**
-     * name : givenValidUser_whenCreateUser_thenThrowNotYetImplementException
-     * desc : 사용자 생성시 NotYetImplementedException 발생
-     * 
+     * <ul>
+     * <li> name : givenValidUser_whenCreateUser_thenThrowNotYetImplementException
+     * <li> desc : 사용자 생성시 NotYetImplementedException 발생
+     * </ul>
      * @throws Exception
      */
     @Test
@@ -68,9 +70,10 @@ public class UserControllerTest {
     }
 
     /**
-     * name : givenValidUser_whenGetAllUsers_thenThrowNotYetImplementException
-     * desc : 모든 사용자 조회시 NotYetImplementedException 발생
-     * 
+     * <ul>
+     * <li> name : givenValidUser_whenGetAllUsers_thenThrowNotYetImplementException
+     * <li> desc : 모든 사용자 조회시 NotYetImplementedException 발생
+     * </ul>
      * @throws Exception
      */
     @Test
@@ -87,9 +90,10 @@ public class UserControllerTest {
     }
 
     /**
-     * name : givenValidUserId_whenGetUser_thenThrowNotYetImplementException
-     * desc : 사용자 ID로 조회시 NotYetImplementedException 발생
-     * 
+     * <ul>
+     * <li> name : givenValidUserId_whenGetUser_thenThrowNotYetImplementException
+     * <li> desc : 사용자 ID로 조회시 NotYetImplementedException 발생
+     * </ul>
      * @throws Exception
      */
     @Test
@@ -106,9 +110,10 @@ public class UserControllerTest {
     }
 
     /**
-     * name : givenValidUserIdAndUser_whenUpdateUser_thenThrowNotYetImplementException
-     * desc : 사용자 ID로 업데이트시 NotYetImplementedException 발생
-     * 
+     * <ul>
+     * <li> name : givenValidUserIdAndUser_whenUpdateUser_thenThrowNotYetImplementException
+     * <li> desc : 사용자 ID로 업데이트시 NotYetImplementedException 발생
+     * </ul>
      * @throws Exception
      */
     @Test
@@ -132,9 +137,10 @@ public class UserControllerTest {
     }
 
     /**
-     * name : givenValidUserId_whenDeleteUser_thenThrowNotYetImplementException
-     * desc : 사용자 ID로 삭제시 NotYetImplementedException 발생
-     * 
+     * <ul>
+     * <li> name : givenValidUserId_whenDeleteUser_thenThrowNotYetImplementException
+     * <li> desc : 사용자 ID로 삭제시 NotYetImplementedException 발생
+     * </ul>
      * @throws Exception
      */
     @Test
