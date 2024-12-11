@@ -29,6 +29,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * <ul>
+     *    <li>name : createUser
+     *    <li>desc : 사용자를 생성한다.
+     * </ul>
+     * @param Users user
+     * @return ResponseEntity<Users>
+     */
     @Operation(summary ="Create User", description = "Create User!")
     @PostMapping("/")
     @ApiResponses(
@@ -48,6 +56,14 @@ public class UserController {
         //return new ResponseEntity<>(saved, status);
     }
 
+    /**
+     * <ul>
+     *    <li>name : getAllUsers
+     *    <li>desc : 모든 사용자 정보를 조회한다.
+     * </ul>
+     * @param 
+     * @return List<Users>
+     */
     @Operation(summary ="Get User", description = "Return all Users")
     @GetMapping("/")
     @ApiResponses(
@@ -62,6 +78,14 @@ public class UserController {
         //return userService.getAllUsers();
     }
 
+    /**
+     * <ul>
+     *    <li>name : getUser
+     *    <li>desc : 특정 사용자 정보를 조회한다.
+     * </ul>
+     * @param Long id
+     * @return ResponseEntity<Users>
+     */
     @Operation(summary ="Get User", description = "Return User by ID")
     @Parameter(name = "id", description = "사용자 ID", required = true)
     @GetMapping("/{id}")
@@ -82,6 +106,14 @@ public class UserController {
         //        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * <ul>
+     *    <li>name : updateUser
+     *    <li>desc : 사용자 정보를 변경한다.
+     * </ul>
+     * @param Long id, Users user
+     * @return ResponseEntity<Users>
+     */
     @Operation(summary ="Put User", description = "Update User by ID")
     @Parameter(name = "id", description = "사용자 ID", required = true)
     @PutMapping("/{id}")
@@ -105,6 +137,14 @@ public class UserController {
         //        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * <ul>
+     *    <li>name : deleteUser
+     *    <li>desc : 특정 사용자 정보를 삭제한다.
+     * </ul>
+     * @param Long id
+     * @return ResponseEntity<?> //TODO : 삭제 성공시 반환값 타입 정하기
+     */
     @Operation(summary ="Delete User", description = "Delete User by ID")
     @Parameter(name = "id", description = "사용자 ID", required = true)
     @DeleteMapping("/{id}")
