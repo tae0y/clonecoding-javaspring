@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "User", description = "사용자 정보")
+@Tag(name = "Users", description = "사용자 정보")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
