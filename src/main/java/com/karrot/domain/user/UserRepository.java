@@ -9,14 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public interface UserRepository extends JpaRepository<Users, Long> {
+public interface UserRepository extends JpaRepository<UsersEntity, Long> {
 
     //TODO: JPA 이름규칙에 맞춰 수정하기
-    public Users save(Users user);
+    public UsersEntity save(UsersEntity user);
 
-    public List<Users> findAll();
+    public List<UsersEntity> findAll();
 
-    public Optional<Users> findById(Long id);
+    public Optional<UsersEntity> findById(Long id);
 
     //public Users updateById(Long id, Users user);
 
