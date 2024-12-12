@@ -9,9 +9,9 @@ mvn spring-boot:run -Dspring-boot.run.profiles=local
 - **lint, unit test**
 ```shell
 # spectral lint
-mvn spring-boot:run -Dspring-boot.run.profiles=local &
+mvn spring-boot:run -Dspring-boot.run.profiles=local > /dev/null 2>&1 &
 APP_PID=$!
-sleep 10
+sleep 5
 rm -f swagger.json
 curl http://localhost:8080/v3/api-docs -o swagger.json
 spectral lint swagger.json #spectral lint -f json -F warn -D -q swagger.json | ConvertFrom-Json
