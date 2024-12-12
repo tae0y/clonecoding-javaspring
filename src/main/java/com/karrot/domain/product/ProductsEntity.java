@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
@@ -90,9 +91,9 @@ public class ProductsEntity {
     /**
      * 상품을 등록한 사용자 정보
      */
-    @Column(nullable = false)
     @NotNull
     @ManyToOne
+    @JoinColumn(name = "createUserId", nullable = false)
     private UsersEntity createUser;
 
     /**
@@ -106,9 +107,9 @@ public class ProductsEntity {
     /**
      * 상품을 수정한 사용자 정보
      */
-    @Column(nullable = true)
     @Nullable
     @ManyToOne
+    @JoinColumn(name = "modifyUserId", nullable = true)
     private UsersEntity modifyUser;
 
     /**
@@ -122,9 +123,9 @@ public class ProductsEntity {
     /**
      * 상품을 삭제한 사용자 정보
      */
-    @Column(nullable = true)
     @Nullable
     @ManyToOne
+    @JoinColumn(name = "deleteUserId", nullable = true)
     private UsersEntity deleteUser;
 
     /**

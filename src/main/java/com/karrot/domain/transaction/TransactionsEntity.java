@@ -7,11 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.lang.Nullable;
 
 import com.karrot.domain.product.ProductsEntity;
@@ -36,24 +40,24 @@ public class TransactionsEntity {
      * 거래할 상품
      */
     @ManyToOne
-    @Column(nullable = false)
     @NotNull
+    @JoinColumn(name = "productId", nullable = false)
     private ProductsEntity product;
 
     /**
      * 구매자
      */
     @ManyToOne
-    @Column(nullable = false)
     @NotNull
+    @JoinColumn(name = "buyerId", nullable = false)
     private UsersEntity buyer;
 
     /**
      * 판매자
      */
     @ManyToOne
-    @Column(nullable = false)
     @NotNull
+    @JoinColumn(name = "sellerId", nullable = false)
     private UsersEntity seller;
 
     /**
@@ -89,9 +93,9 @@ public class TransactionsEntity {
      * 거래 등록자
      */
     //TODO: createdUserId인지, createUsers로 할지 고민 필요
-    @Column(nullable = false)
     @NotNull
     @ManyToOne
+    @JoinColumn(name = "createdUserId", nullable = false)
     private UsersEntity createUser;
 
     /**
@@ -99,14 +103,15 @@ public class TransactionsEntity {
      */
     @Column(nullable = false)
     @NotNull
+    @CreatedDate
     private LocalDateTime createdDateTime;
 
     /**
      * 거래 수정자
      */
     @ManyToOne
-    @Column(nullable = true)
     @Nullable
+    @JoinColumn(name = "modifiedUserId", nullable = true)
     private UsersEntity modifyUser;
 
     /**
@@ -114,14 +119,15 @@ public class TransactionsEntity {
      */
     @Column(nullable = true)
     @Nullable
+    @LastModifiedDate
     private LocalDateTime modifiedDateTime;
 
     /**
      * 거래 삭제자
      */
     @ManyToOne
-    @Column(nullable = true)
     @Nullable
+    @JoinColumn(name = "deletedUserId", nullable = true)
     private UsersEntity deleteUser;
 
     /**
@@ -130,4 +136,12 @@ public class TransactionsEntity {
     @Column(nullable = true)
     @Nullable
     private LocalDateTime deletedDateTime;
+
+    /**
+     * 삭제일시 자동 생성
+     */
+    @PreRemove
+    public void preRemove() {
+        this.deletedDateTime = LocalDateTime.now();
+    }
 }
