@@ -16,25 +16,25 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public Users createUser(Users user)
+    public UsersResponseDTO createUser(UsersRequestDTO user)
     {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public List<Users> getAllUsers()
+    public List<UsersResponseDTO> getAllUsers()
     {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public Users getUser(Long id)
+    public UsersResponseDTO getUser(Long id)
     {
         throw new NotYetImplementedException();
     }
 
     @Override
-    public Users updateUser(Long id, Users user)
+    public UsersResponseDTO updateUser(Long id, UsersRequestDTO user)
     {
         throw new NotYetImplementedException();
     }

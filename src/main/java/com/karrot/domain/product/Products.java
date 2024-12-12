@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.karrot.domain.user.Users;
+import com.karrot.domain.user.UsersEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -43,21 +43,21 @@ public class Products {
 
     @ManyToOne
     @Schema(name = "createUser", description = "상품을 등록한 사용자 정보")
-    private Users createUser;
+    private UsersEntity createUser;
 
     @Schema(name = "createdDateTime", description = "상품 등록일시")
     private LocalDateTime createdDateTime;
 
     @ManyToOne
     @Schema(name = "modifyUser", description = "상품을 수정한 사용자 정보")
-    private Users modifyUser;
+    private UsersEntity modifyUser;
 
     @Schema(name = "modifiedDateTime", description = "상품 수정일시")
     private LocalDateTime modifiedDateTime;
 
     @ManyToOne
     @Schema(name = "deleteUser", description = "상품을 삭제한 사용자 정보")
-    private Users deleteUser;
+    private UsersEntity deleteUser;
 
     @Schema(name = "deletedDateTime", description = "상품 삭제일시")
     private LocalDateTime deletedDateTime;

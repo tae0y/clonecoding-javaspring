@@ -54,7 +54,7 @@ public class UserControllerTest {
     @Test
     public void givenValidUser_whenCreateUser_thenThrowNotYetImplementException() throws Exception {
         //given
-        Users user = new Users();
+        UsersEntity user = new UsersEntity();
         user.setId(1L);
         user.setName("John Doe");
         String payload = new ObjectMapper().writeValueAsString(user);
@@ -121,13 +121,13 @@ public class UserControllerTest {
     @Test
     public void givenValidUserIdAndUser_whenUpdateUser_thenThrowNotYetImplementException() throws Exception {
         //given
-        Users user = new Users();
-        user.setId(1L);
+        UsersRequestDTO user = new UsersRequestDTO();
+        //user.setId(1L);
         user.setName("John Doe");
         String payload = new ObjectMapper().writeValueAsString(user);
 
         //when
-        when(userController.updateUser(any(Long.class), any(Users.class))).thenThrow(new NotYetImplementedException());
+        when(userController.updateUser(any(Long.class), any(UsersRequestDTO.class))).thenThrow(new NotYetImplementedException());
         MockHttpServletRequestBuilder request = put("/api/users/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content(payload);
