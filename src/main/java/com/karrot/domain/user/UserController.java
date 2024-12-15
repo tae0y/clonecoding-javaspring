@@ -112,7 +112,7 @@ public class UserController {
      *    <li>desc : 사용자 정보를 변경한다.
      * </ul>
      * @param Long id, UsersRequestDTO user
-     * @return UsersResponseDTO<Users>
+     * @return UsersResponseDTO
      */
     @Operation(summary ="Put User", description = "Update User by ID")
     @Parameter(name = "id", description = "사용자 ID", required = true)
