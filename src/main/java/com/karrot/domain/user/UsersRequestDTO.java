@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@Schema(name = "User", description = "사용자 정보")
+@Schema(name = "UsersRequestDTO", description = "사용자 정보")
 public class UsersRequestDTO {
     /**
      * 사용자 이름
