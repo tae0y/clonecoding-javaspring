@@ -2,19 +2,28 @@ package com.karrot.domain.user;
 
 import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.karrot.global.common.ResponseDTOWrapper;
+import com.karrot.global.common.ResponseStatusEnum;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.ConstraintViolationException;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -34,26 +43,73 @@ public class UserController {
      *    <li>name : createUser
      *    <li>desc : 사용자를 생성한다.
      * </ul>
-     * @param UsersResponseDTO user
-     * @return ResponseEntity<UsersResponseDTO>
+     * @param UsersRequestDTO user
+     * @return ResponseEntity<ResponseDTOWrapper<UsersResponseDTO>>
      */
     @Operation(summary ="Create User", description = "Create User!")
     @PostMapping("/")
+    //@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "사용자 정보", required = true, content = @Content(schema = @Schema(implementation = UsersRequestDTO.class)))
     @ApiResponses(
         value = {
             //TODO : [개선] 응답코드에 따라 객체 언마샬 로직이 분기를 타야함. responseCode, responseMessage, responseSchema를 포함한 객체를 반환하도록 수정
-            @ApiResponse(responseCode = "201", description = "Create User Succeess", content = @Content(examples={}, schema = @Schema(implementation = UsersResponseDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Invalid input")}, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Forbidden")}, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "409", description = "User already exists", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="User Already exists")}, schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "503", description = "Internal server error", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Internal server error")}, schema = @Schema(implementation = String.class)))
+            @ApiResponse(responseCode = "201", description = "Create User Succeess" , content = @Content(examples={}, schema = @Schema(implementation = ResponseDTOWrapper.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input"        , content = @Content(examples={}, schema = @Schema(implementation = ResponseDTOWrapper.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden"            , content = @Content(examples={}, schema = @Schema(implementation = ResponseDTOWrapper.class))),
+            @ApiResponse(responseCode = "409", description = "User already exists"  , content = @Content(examples={}, schema = @Schema(implementation = ResponseDTOWrapper.class))),
+            @ApiResponse(responseCode = "503", description = "Internal server error", content = @Content(examples={}, schema = @Schema(implementation = ResponseDTOWrapper.class)))
         }
     )
-    public ResponseEntity<UsersResponseDTO> createUser(@RequestBody UsersResponseDTO user) {
-        throw new NotYetImplementedException();
-        //HttpStatus status = HttpStatus.CREATED;
-        //User saved = userService.save(user);
-        //return new ResponseEntity<>(saved, status);
+    public ResponseEntity<ResponseDTOWrapper<UsersResponseDTO>> createUser(@RequestBody UsersRequestDTO user) {
+        // prepare
+        ResponseDTOWrapper<UsersResponseDTO> response;
+        HttpStatus resStatus;
+
+        // process
+        try {
+            // request dto 객체를 service 레이어로 전달하여 처리한다
+            UsersResponseDTO resDto = userService.createUser(user);
+
+            // response dto 객체로 ResponseDTOWrapper를 만들어 반환한다.
+            response = new ResponseDTOWrapper<>();
+            response.setData(List.of(resDto));
+            response.setResponseMessage("Create User Success");
+            response.setResponseStatus(ResponseStatusEnum.SUCCESS);
+            response.setOriginalStatus(HttpStatus.CREATED);
+            resStatus = HttpStatus.CREATED;
+        }
+        //TODO : [개선] 예외 처리 세분화, 400/403/409
+        catch (TransactionSystemException e) {
+            e.printStackTrace();
+            if(e.getCause() instanceof ConstraintViolationException){
+                response = new ResponseDTOWrapper<>();
+                response.setData(new ArrayList<UsersResponseDTO>());
+                response.setResponseMessage("Invalid input");
+                response.setResponseStatus(ResponseStatusEnum.FAIL_INTERNAL);
+                response.setOriginalStatus(HttpStatus.BAD_REQUEST); //400
+                resStatus = HttpStatus.BAD_REQUEST;
+            }
+            else {
+                response = new ResponseDTOWrapper<>();
+                response.setData(new ArrayList<UsersResponseDTO>());
+                response.setResponseMessage("Internal server error");
+                response.setResponseStatus(ResponseStatusEnum.FAIL_INTERNAL);
+                response.setOriginalStatus(HttpStatus.INTERNAL_SERVER_ERROR); //503
+                resStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            response = new ResponseDTOWrapper<>();
+            response.setData(new ArrayList<UsersResponseDTO>());
+            response.setResponseMessage("Internal server error");
+            response.setResponseStatus(ResponseStatusEnum.FAIL_INTERNAL);
+            response.setOriginalStatus(HttpStatus.INTERNAL_SERVER_ERROR); //503
+            resStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        // return
+        return new ResponseEntity<>(response, resStatus);
     }
 
     /**
@@ -73,9 +129,33 @@ public class UserController {
             @ApiResponse(responseCode = "503", description = "Internal server error", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Internal server error")}, schema = @Schema(implementation = String.class)))
         }
     )
-    public List<UsersResponseDTO> getAllUsers() {
-        throw new NotYetImplementedException();
-        //return userService.getAllUsers();
+    public ResponseEntity<ResponseDTOWrapper<UsersResponseDTO>> getAllUsers() {
+        // prepare
+        ResponseDTOWrapper<UsersResponseDTO> response;
+        HttpStatus resStatus;
+
+        // process
+        try {
+            List<UsersResponseDTO> resDtoList = userService.getAllUsers();
+            response = new ResponseDTOWrapper<>();
+            response.setData(resDtoList);
+            response.setResponseMessage("Get User Success");
+            response.setResponseStatus(ResponseStatusEnum.SUCCESS);
+            response.setOriginalStatus(HttpStatus.OK);
+            resStatus = HttpStatus.OK;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            response = new ResponseDTOWrapper<>();
+            response.setData(new ArrayList<UsersResponseDTO>());
+            response.setResponseMessage("Internal server error");
+            response.setResponseStatus(ResponseStatusEnum.FAIL_INTERNAL);
+            response.setOriginalStatus(HttpStatus.INTERNAL_SERVER_ERROR); //503
+            resStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        // return
+        return new ResponseEntity<>(response, resStatus);
     }
 
     /**

@@ -1,7 +1,10 @@
 package com.karrot.domain.user;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.tomcat.jni.User;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +21,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public UsersResponseDTO createUser(UsersRequestDTO user)
     {
-        throw new NotYetImplementedException();
+        // prepare
+        UsersEntity entity = new UsersEntity(user);
+        //TODO: 필수값 검사후 예외 던지기
+
+        // process
+        UsersEntity result = userRepository.save(entity);
+
+        // return
+        return new UsersResponseDTO(result);
     }
 
     @Override
     public List<UsersResponseDTO> getAllUsers()
     {
-        throw new NotYetImplementedException();
+        // prepare
+        // process
+        List<UsersEntity> result = userRepository.findAll();
+        List<UsersResponseDTO> responseList = new ArrayList<>();
+        for (UsersEntity entity : result) {
+            responseList.add(new UsersResponseDTO(entity));
+        }
+
+        // return
+        return responseList;
     }
 
     @Override
