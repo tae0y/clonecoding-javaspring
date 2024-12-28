@@ -1,6 +1,9 @@
 package com.karrot.global.common;
 
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
+
 import lombok.Data;
 
 /**
@@ -26,13 +29,13 @@ public class ResponseDTOWrapper<T> {
      * responseStatus
      * 사용자에게 표출되는 응답코드
      */
-    private int responseStatus;
+    private ResponseStatusEnum responseStatus;
 
     /**
      * originalStatus
      * 사용자에게 노출되지 않는 실제 HTTP 응답코드
      */
-    private int originalStatus;
+    private HttpStatus originalStatus;
 
     /**
      * ResponseDTOWrapper
@@ -41,10 +44,17 @@ public class ResponseDTOWrapper<T> {
      * @param responseStatus 사용자에게 표출되는 응답코드
      * @param originalStatus 사용자에게 노출되지 않는 실제 HTTP 응답코드
      */
-    public ResponseDTOWrapper(List<T> data, String responseMessage, int responseStatus, int originalStatus) {
+    public ResponseDTOWrapper(List<T> data, String responseMessage, ResponseStatusEnum responseStatus, HttpStatus originalStatus) {
         this.data = data;
         this.responseMessage = responseMessage;
         this.responseStatus = responseStatus;
         this.originalStatus = originalStatus;
+    }
+
+    /**
+     * ResponseDTOWrapper
+     * - 기본 생성자
+     */
+    public ResponseDTOWrapper() {
     }
 }

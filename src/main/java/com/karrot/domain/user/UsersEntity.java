@@ -105,6 +105,22 @@ public class UsersEntity {
     private LocalDateTime deletedDateTime;
 
     /**
+     * UsersEntity 기본 생성자
+     */
+    public UsersEntity() {
+    }
+
+    public UsersEntity(UsersRequestDTO request){
+        this.name = request.getName();
+        this.introduction = request.getIntroduction();
+        this.isActive = true; //TODO: 사용자 등록시 바로 활성화? 이후 인증후 활성화?
+        this.createProgramId = request.getCreateProgramId();
+        this.modifyProgramId = request.getModifyProgramId();
+        this.deleteProgramId = request.getDeleteProgramId();
+    }
+
+
+    /**
      * 삭제일시 자동 생성
      */
     @PreRemove
