@@ -21,7 +21,6 @@ public class UserServiceImpl implements UserService {
     {
         // prepare
         UsersEntity entity = new UsersEntity(user);
-        //TODO: 필수값 검사후 예외 던지기
 
         // process
         UsersEntity result = userRepository.save(entity);
