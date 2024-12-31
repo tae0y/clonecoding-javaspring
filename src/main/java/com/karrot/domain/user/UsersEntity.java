@@ -60,8 +60,11 @@ public class UsersEntity implements AuditableEntity {
     /**
      * 사용자 등록 프로그램 Id(자체 회원가입, OAuth 등)
      */
-    @Column(nullable = false, length = 20)
-    @NotNull
+    //TODO : 엔티티 null 제약조건 재검토
+    //@Column(nullable = false, length = 20)
+    //@NotNull
+    @Column(nullable = true, length = 20)
+    @Nullable
     @Size(max = 20)
     //@CreatedBy TODO: [개선] JPA Auditing을 사용하여 사용자 ID를 자동으로 생성하도록 수정, 그럼 시스템단의 변경은?
     private String createProgramId;
@@ -69,8 +72,11 @@ public class UsersEntity implements AuditableEntity {
     /**
      * 사용자 등록일시
      */
-    @Column(nullable = false)
-    @NotNull
+    //TODO : 엔티티 null 제약조건 재검토
+    //@Column(nullable = false)
+    //@NotNull
+    @Column(nullable = true)
+    @Nullable
     private LocalDateTime createdDateTime;
 
     /**
