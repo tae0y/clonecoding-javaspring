@@ -1,4 +1,4 @@
-package com.karrot.global.error;
+package com.karrot.domain.user;
 
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -18,7 +18,7 @@ import com.karrot.global.common.ResponseStatusEnum;
  * 전역 예외 처리 클래스
  */
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class UsersControllerExceptionHandler {
 
     /**
      * NotYetImplementedException 예외 처리
