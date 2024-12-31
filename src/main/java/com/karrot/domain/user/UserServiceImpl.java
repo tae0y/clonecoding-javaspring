@@ -3,12 +3,14 @@ package com.karrot.domain.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+/**
+ * UserServiceImpl
+ * - 사용자 정보 Service 레이어
+ */
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {

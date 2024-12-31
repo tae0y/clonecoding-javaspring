@@ -31,9 +31,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/users")
 /**
- * 사용자 정보 컨트롤러
+ * UserController
  * 
- * - 사용자 정보를 생성, 조회, 변경, 삭제하는 기능을 제공
+ * - 사용자 정보를 생성, 조회, 변경, 삭제 Controller 레이어
  * - 예외처리는 GlobalExceptionHandler에서 처리
  */
 public class UserController {
