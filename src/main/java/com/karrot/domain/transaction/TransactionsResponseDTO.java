@@ -2,12 +2,6 @@ package com.karrot.domain.transaction;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.lang.Nullable;
-
 import com.karrot.domain.product.ProductsEntity;
 import com.karrot.domain.user.UsersEntity;
 

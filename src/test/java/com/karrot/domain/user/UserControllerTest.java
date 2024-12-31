@@ -1,162 +1,204 @@
 package com.karrot.domain.user;
 
-import org.junit.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.runner.RunWith;
+import java.util.Arrays;
+import java.util.List;
+
+import org.hibernate.exception.ConstraintViolationException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.http.MediaType;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import org.hibernate.cfg.NotYetImplementedException;
-
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = UserController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
-@ActiveProfiles("test")
+/**
+ * UserControllerTest
+ * - 사용자 정보 Controller 테스트
+ */
+@WebMvcTest(UserController.class)
 public class UserControllerTest {
-    @Autowired
-    private MockMvc mvc;
 
-    //TODO: service 구현 이후에는 의존성 mock 객체 주입후 테스트
-    //TODO: @WebMvcTest controllers=UserController.class, 설정해서 실제 구현을 바라보고 테스트
-    @MockBean
-    private UserController userController;
+    @Autowired
+    private MockMvc mockMvc;
 
     @MockBean
     private UserService userService;
 
-    // TODO: Controller 구현 로직에 대한 단위테스트
-    // TODO: [착안] swagger docs, unittest docs 어느쪽이 좋을까? https://jaeseo0519.tistory.com/406
-    /**
-     * <ul>
-     * <li> name : givenValidUser_whenCreateUser_thenThrowNotYetImplementException
-     * <li> desc : 사용자 생성시 NotYetImplementedException 발생
-     * </ul>
-     * @throws Exception
-     */
-    @Test
-    public void givenValidUser_whenCreateUser_thenThrowNotYetImplementException() throws Exception {
-        //given
-        UsersEntity user = new UsersEntity();
-        user.setId(1L);
-        user.setName("John Doe");
-        String payload = new ObjectMapper().writeValueAsString(user);
+    @Autowired
+    private ObjectMapper objectMapper;
 
-        //when
-        when(userController.createUser(any())).thenThrow(new NotYetImplementedException());
-        MockHttpServletRequestBuilder request = post("/api/users/")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(payload);
+    private UsersRequestDTO testUserRequest;
+    private UsersResponseDTO testUserResponse;
 
-        //then
-        mvc.perform(request)
-            .andExpect(status().isNotImplemented())
-            .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotYetImplementedException));
+    @BeforeEach
+    void setUp() {
+        testUserRequest = new UsersRequestDTO();
+        // UsersRequestDTO 필드 설정
+
+        testUserResponse = new UsersResponseDTO();
+        testUserResponse.setId(1L);
+        // UsersResponseDTO 필드 설정
     }
 
     /**
-     * <ul>
-     * <li> name : givenValidUser_whenGetAllUsers_thenThrowNotYetImplementException
-     * <li> desc : 모든 사용자 조회시 NotYetImplementedException 발생
-     * </ul>
+     * givenFullyValidUser_whenCreateUser_thenShouldReturnCreated
+     * - 유효한 사용자 정보가 주어졌을때 사용자 생성이 잘 되는지
      * @throws Exception
      */
     @Test
-    public void givenValidUser_whenGetAllUsers_thenThrowNotYetImplementException() throws Exception {
-        //when
-        when(userController.getAllUsers()).thenThrow(new NotYetImplementedException());
-        MockHttpServletRequestBuilder request = get("/api/users/")
-            .contentType(MediaType.APPLICATION_JSON);
+    void givenFullyValidUser_whenCreateUser_thenShouldReturnCreated() throws Exception {
+        // given
+        // testUserResponse
+        when(userService.createUser(any(UsersRequestDTO.class))).thenReturn(testUserResponse);
 
-        //then
-        mvc.perform(request)
-            .andExpect(status().isNotImplemented())
-            .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotYetImplementedException));
+        // when & then
+        mockMvc.perform(post("/api/users/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testUserRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data[0].id").value(1L));
     }
 
     /**
-     * <ul>
-     * <li> name : givenValidUserId_whenGetUser_thenThrowNotYetImplementException
-     * <li> desc : 사용자 ID로 조회시 NotYetImplementedException 발생
-     * </ul>
+     * givenInvalidUserName_whenCreateUser_thenShouldReturnBadRequest
+     * - 사용자 이름이 유효하지 않을때 InvalidInput 반환
      * @throws Exception
      */
     @Test
-    public void givenValidUserId_whenGetUser_thenThrowNotYetImplementException() throws Exception {
-        //when
-        when(userController.getUser(any(Long.class))).thenThrow(new NotYetImplementedException());
-        MockHttpServletRequestBuilder request = get("/api/users/1")
-            .contentType(MediaType.APPLICATION_JSON);
+    void givenInvalidUserName_whenCreateUser_thenShouldReturnBadRequest() throws Exception {
+        // given
+        testUserRequest.setName("123456789101112131415");
 
-        //then
-        mvc.perform(request)
-            .andExpect(status().isNotImplemented())
-            .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotYetImplementedException));
+        // TODO: 중첩된 예외케이스의 단위테스트는 어떻게 작성해야 하는가
+        ConstraintViolationException constraintViolationException = new ConstraintViolationException(null, null, null);
+        when(userService.createUser(any(UsersRequestDTO.class)))
+                .thenThrow(new DataIntegrityViolationException("Data integrity violation", constraintViolationException));
+
+        // when & then
+        mockMvc.perform(post("/api/users/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testUserRequest)))
+                .andExpect(status().isBadRequest());
     }
 
     /**
-     * <ul>
-     * <li> name : givenValidUserIdAndUser_whenUpdateUser_thenThrowNotYetImplementException
-     * <li> desc : 사용자 ID로 업데이트시 NotYetImplementedException 발생
-     * </ul>
+     * givenAnything_whenGetAllUsers_thenShouldReturnList
+     * - 사용자 전체 조회시 사용자 리스트 반환
      * @throws Exception
      */
     @Test
-    public void givenValidUserIdAndUser_whenUpdateUser_thenThrowNotYetImplementException() throws Exception {
-        //given
-        UsersRequestDTO user = new UsersRequestDTO();
-        //user.setId(1L);
-        user.setName("John Doe");
-        String payload = new ObjectMapper().writeValueAsString(user);
+    void givenAnything_whenGetAllUsers_thenShouldReturnList() throws Exception {
+        // given
+        List<UsersResponseDTO> usersList = Arrays.asList(testUserResponse);
+        when(userService.getAllUsers()).thenReturn(usersList);
 
-        //when
-        when(userController.updateUser(any(Long.class), any(UsersRequestDTO.class))).thenThrow(new NotYetImplementedException());
-        MockHttpServletRequestBuilder request = put("/api/users/1")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(payload);
-
-        //then
-        mvc.perform(request)
-            .andExpect(status().isNotImplemented())
-            .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotYetImplementedException));
+        // when & then
+        mockMvc.perform(get("/api/users/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].id").value(1L));
     }
 
     /**
-     * <ul>
-     * <li> name : givenValidUserId_whenDeleteUser_thenThrowNotYetImplementException
-     * <li> desc : 사용자 ID로 삭제시 NotYetImplementedException 발생
-     * </ul>
+     * givenExistingUserId_whenGetUser_thenShouldReturnUser
+     * - 존재하는 사용자 ID로 사용자 조회시 사용자 반환
      * @throws Exception
      */
     @Test
-    public void givenValidUserId_whenDeleteUser_thenThrowNotYetImplementException() throws Exception {
-        //when
-        when(userController.deleteUser(any(Long.class))).thenThrow(new NotYetImplementedException());
-        MockHttpServletRequestBuilder request = delete("/api/users/1")
-            .contentType(MediaType.APPLICATION_JSON);
+    void givenExistingUserId_whenGetUser_thenShouldReturnUser() throws Exception {
+        // given
+        when(userService.getUser(1L)).thenReturn(testUserResponse);
 
-        //then
-        mvc.perform(request)
-            .andExpect(status().isNotImplemented())
-            .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotYetImplementedException));
+        // when & then
+        mockMvc.perform(get("/api/users/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].id").value(1L));
     }
 
+    /**
+     * givenNonExistingUserId_whenGetUser_thenShouldReturnNotFound
+     * - 존재하지 않는 사용자 ID로 사용자 조회시 NotFound 반환
+     * @throws Exception
+     */
+    @Test
+    void givenNonExistingUserId_whenGetUser_thenShouldReturnNotFound() throws Exception {
+        // given
+        when(userService.getUser(999L)).thenReturn(null);
 
+        // when & then
+        mockMvc.perform(get("/api/users/999"))
+                .andExpect(status().isNotFound());
+    }
+
+    /**
+     * givenExistingUserId_whenUpdateUser_thenShouldReturnUpdatedUser
+     * - 존재하는 사용자 ID로 사용자 수정시 수정된 사용자 반환
+     * @throws Exception
+     */
+    @Test
+    void givenExistingUserId_whenUpdateUser_thenShouldReturnUpdatedUser() throws Exception {
+        // given
+        when(userService.updateUser(eq(1L), any(UsersRequestDTO.class))).thenReturn(testUserResponse);
+
+        // when & then
+        mockMvc.perform(put("/api/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testUserRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].id").value(1L));
+    }
+
+    /**
+     * givenNonExistingUserId_whenUpdateUser_thenShouldReturnNotFound
+     * - 존재하지 않는 사용자 ID로 사용자 수정시 NotFound 반환
+     * @throws Exception
+     */
+    @Test
+    void givenNonExistingUserId_whenUpdateUser_thenShouldReturnNotFound() throws Exception {
+        // given
+        when(userService.updateUser(eq(999L), any(UsersRequestDTO.class))).thenThrow(new NullPointerException());
+
+        // when & then
+        mockMvc.perform(put("/api/users/999")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testUserRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    /**
+     * givenExistingUserId_whenDeleteUser_thenShouldReturnSuccess
+     * - 존재하는 사용자 ID로 사용자 삭제시 성공 반환
+     * @throws Exception
+     */
+    @Test
+    void givenExistingUserId_whenDeleteUser_thenShouldReturnSuccess() throws Exception {
+        when(userService.deleteUser(eq(1L))).thenReturn(true);
+        
+        // when & then
+        mockMvc.perform(delete("/api/users/1"))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * givenNonExistingUserId_whenDeleteUser_thenShouldReturnNotFound
+     * - 존재하지 않는 사용자 ID로 사용자 삭제시 NotFound 반환
+     * @throws Exception
+     */
+    @Test
+    void givenNonExistingUserId_whenDeleteUser_thenShouldReturnNotFound() throws Exception {
+        when(userService.deleteUser(eq(999L))).thenThrow(new NullPointerException());
+
+        // when & then
+        mockMvc.perform(delete("/api/users/999"))
+                .andExpect(status().isNotFound());
+    }
 }

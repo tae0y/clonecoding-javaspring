@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@Schema(name = "User", description = "사용자 정보")
+@Schema(name = "UsersResponseDTO", description = "사용자 정보")
 public class UsersResponseDTO {
     /**
      * 사용자 ID
@@ -67,4 +67,27 @@ public class UsersResponseDTO {
      */
     @Schema(name = "deletedDateTime", description = "사용자 삭제일시", required = false, nullable = true, example = "2023-01-03T12:00:00")
     private LocalDateTime deletedDateTime;
+
+    /**
+     * UsersResponseDTO 기본 생성자
+     */
+    public UsersResponseDTO() {
+    }
+
+    /**
+     * UsersResponseDTO 생성자
+     * @param entity UsersEntity
+     */
+    public UsersResponseDTO(UsersEntity entity) {
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.introduction = entity.getIntroduction();
+        this.isActive = entity.isActive();
+        this.createProgramId = entity.getCreateProgramId();
+        this.createdDateTime = entity.getCreatedDateTime();
+        this.modifyProgramId = entity.getModifyProgramId();
+        this.modifiedDateTime = entity.getModifiedDateTime();
+        this.deleteProgramId = entity.getDeleteProgramId();
+        this.deletedDateTime = entity.getDeletedDateTime();
+    }
 }

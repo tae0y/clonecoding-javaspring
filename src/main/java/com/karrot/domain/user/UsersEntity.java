@@ -4,30 +4,32 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.lang.Nullable;
+
+import com.karrot.global.jpaaudit.AuditableEntity;
+import com.karrot.global.jpaaudit.AuditingEntityListener;
 
 import lombok.Data;
 
 @Entity
 @Table(name="users")
+@EntityListeners(AuditingEntityListener.class)
 @Data
-public class UsersEntity {
+public class UsersEntity implements AuditableEntity {
     /**
      * 사용자 ID
      */
     @Id
     //TODO : [개선] H2, PostgreSQL 등 각 DB에 맞는 ID 생성 전략을 수립하여야함
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     @NotNull
     private Long id;
@@ -58,8 +60,11 @@ public class UsersEntity {
     /**
      * 사용자 등록 프로그램 Id(자체 회원가입, OAuth 등)
      */
-    @Column(nullable = false, length = 20)
-    @NotNull
+    //TODO : 엔티티 null 제약조건 재검토
+    //@Column(nullable = false, length = 20)
+    //@NotNull
+    @Column(nullable = true, length = 20)
+    @Nullable
     @Size(max = 20)
     //@CreatedBy TODO: [개선] JPA Auditing을 사용하여 사용자 ID를 자동으로 생성하도록 수정, 그럼 시스템단의 변경은?
     private String createProgramId;
@@ -67,9 +72,11 @@ public class UsersEntity {
     /**
      * 사용자 등록일시
      */
-    @Column(nullable = false)
-    @NotNull
-    @CreatedDate
+    //TODO : 엔티티 null 제약조건 재검토
+    //@Column(nullable = false)
+    //@NotNull
+    @Column(nullable = true)
+    @Nullable
     private LocalDateTime createdDateTime;
 
     /**
@@ -86,7 +93,6 @@ public class UsersEntity {
      */
     @Column(nullable = true)
     @Nullable
-    @LastModifiedDate
     private LocalDateTime modifiedDateTime;
 
     /** 
@@ -105,10 +111,17 @@ public class UsersEntity {
     private LocalDateTime deletedDateTime;
 
     /**
-     * 삭제일시 자동 생성
+     * UsersEntity 기본 생성자
      */
-    @PreRemove
-    public void preRemove() {
-        this.deletedDateTime = LocalDateTime.now();
+    public UsersEntity() {
+    }
+
+    public UsersEntity(UsersRequestDTO request){
+        this.name = request.getName();
+        this.introduction = request.getIntroduction();
+        this.isActive = true; //TODO: 사용자 등록시 바로 활성화? 이후 인증후 활성화?
+        this.createProgramId = request.getCreateProgramId();
+        this.modifyProgramId = request.getModifyProgramId();
+        this.deleteProgramId = request.getDeleteProgramId();
     }
 }

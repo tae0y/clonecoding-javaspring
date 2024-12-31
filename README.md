@@ -24,7 +24,6 @@ mvn test
 
 ## Git Convention
 - main : 운영배포라 생각하고 병합
-- dev : 분기된 브랜치를 여기서 통합테스트 진행가능
 - pull request : 등록된 이슈 제목으로 등록
 - merge : 스쿼시 머지
 - branch name : 등록된 이슈번호/제목 사용

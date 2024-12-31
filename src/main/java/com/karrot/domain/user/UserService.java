@@ -12,5 +12,5 @@ public interface UserService {
 
     public UsersResponseDTO updateUser(Long id, UsersRequestDTO user);
 
-    public void deleteUser(Long id);
+    public boolean deleteUser(Long id);
 }
