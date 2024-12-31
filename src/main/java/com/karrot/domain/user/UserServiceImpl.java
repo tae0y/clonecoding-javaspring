@@ -47,18 +47,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public UsersResponseDTO getUser(Long id)
     {
-        throw new NotYetImplementedException();
+        // prepare
+        // process
+        UsersEntity result = userRepository.findById(id).orElse(null);
+
+        // return
+        return new UsersResponseDTO(result);
     }
 
     @Override
     public UsersResponseDTO updateUser(Long id, UsersRequestDTO user)
     {
-        throw new NotYetImplementedException();
+        // prepare
+        UsersEntity entity = new UsersEntity(user);
+        entity.setId(id);
+
+        // process
+        UsersEntity result = userRepository.save(entity);
+
+        // return
+        return new UsersResponseDTO(result);
     }
 
     @Override
     public void deleteUser(Long id)
     {
-        throw new NotYetImplementedException();
+        // prepare
+        // process
+        userRepository.deleteById(id);
+
+        // return
     }
 }

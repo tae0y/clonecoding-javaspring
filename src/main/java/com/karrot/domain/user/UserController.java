@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.karrot.global.common.ResponseDTOWrapper;
 import com.karrot.global.common.ResponseStatusEnum;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +30,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Users", description = "사용자 정보")
 @RestController
 @RequestMapping("/api/users")
+/**
+ * 사용자 정보 컨트롤러
+ * 
+ * - 사용자 정보를 생성, 조회, 변경, 삭제하는 기능을 제공
+ * - 예외처리는 GlobalExceptionHandler에서 처리
+ */
 public class UserController {
     @Autowired
     private UserService userService;
@@ -99,24 +104,13 @@ public class UserController {
         HttpStatus resStatus;
 
         // process
-        try {
-            List<UsersResponseDTO> resDtoList = userService.getAllUsers();
-            response = new ResponseDTOWrapper<>();
-            response.setData(resDtoList);
-            response.setResponseMessage("Get User Success");
-            response.setResponseStatus(ResponseStatusEnum.SUCCESS);
-            response.setOriginalStatus(HttpStatus.OK);
-            resStatus = HttpStatus.OK;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            response = new ResponseDTOWrapper<>();
-            response.setData(new ArrayList<UsersResponseDTO>());
-            response.setResponseMessage("Internal server error");
-            response.setResponseStatus(ResponseStatusEnum.FAIL_INTERNAL);
-            response.setOriginalStatus(HttpStatus.INTERNAL_SERVER_ERROR); //503
-            resStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
+        List<UsersResponseDTO> resDtoList = userService.getAllUsers();
+        response = new ResponseDTOWrapper<>();
+        response.setData(resDtoList);
+        response.setResponseMessage("Get User Success");
+        response.setResponseStatus(ResponseStatusEnum.SUCCESS);
+        response.setOriginalStatus(HttpStatus.OK);
+        resStatus = HttpStatus.OK;
 
         // return
         return new ResponseEntity<>(response, resStatus);
@@ -143,11 +137,30 @@ public class UserController {
             @ApiResponse(responseCode = "503", description = "Internal server error", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Internal server error")}, schema = @Schema(implementation = String.class)))
         }
     )
-    public ResponseEntity<UsersResponseDTO> getUser(@PathVariable Long id) {
-        throw new NotYetImplementedException();
-        //return userService.getUser(id)
-        //        .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
-        //        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<ResponseDTOWrapper<UsersResponseDTO>> getUser(@PathVariable Long id) {
+        // prepare
+        ResponseDTOWrapper<UsersResponseDTO> response;
+        HttpStatus resStatus;
+
+        // process
+        UsersResponseDTO resDto = userService.getUser(id);
+        response = new ResponseDTOWrapper<>();
+        if (resDto != null){
+            response.setData(List.of(resDto));
+            response.setResponseMessage("Get User Success");
+            response.setResponseStatus(ResponseStatusEnum.SUCCESS);
+            response.setOriginalStatus(HttpStatus.OK);
+            resStatus = HttpStatus.OK;
+        } else {
+            response.setData(null);
+            response.setResponseMessage("User not found");
+            response.setResponseStatus(ResponseStatusEnum.FAIL_INTENDED);
+            response.setOriginalStatus(HttpStatus.NOT_FOUND);
+            resStatus = HttpStatus.NOT_FOUND; // 404, 예외를 던지는게 맞을까? 아니면 상태값만?
+        }
+
+        // return
+        return new ResponseEntity<>(response, resStatus);
     }
 
     /**
@@ -170,15 +183,22 @@ public class UserController {
             @ApiResponse(responseCode = "503", description = "Internal server error", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Internal server error")}, schema = @Schema(implementation = String.class)))
         }
     )
-    public ResponseEntity<UsersResponseDTO> updateUser(@PathVariable Long id, @RequestBody UsersRequestDTO user) {
-        throw new NotYetImplementedException();
-        //return userService.getUser(id)
-        //        .map(existingUser -> {
-        //            user.setId(existingUser.getId());
-        //            User saved = userService.save(user);
-        //            return new ResponseEntity<>(saved, HttpStatus.OK);
-        //        })
-        //        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<ResponseDTOWrapper<UsersResponseDTO>> updateUser(@PathVariable Long id, @RequestBody UsersRequestDTO user) {
+        // prepare
+        ResponseDTOWrapper<UsersResponseDTO> response;
+        HttpStatus resStatus;
+
+        // process
+        UsersResponseDTO resDto = userService.updateUser(id, user);
+        response = new ResponseDTOWrapper<>();
+        response.setData(List.of(resDto));
+        response.setResponseMessage("Update User Success");
+        response.setResponseStatus(ResponseStatusEnum.SUCCESS);
+        response.setOriginalStatus(HttpStatus.OK);
+        resStatus = HttpStatus.OK;
+
+        // return
+        return new ResponseEntity<>(response, resStatus);
     }
 
     /**
@@ -201,13 +221,21 @@ public class UserController {
             @ApiResponse(responseCode = "503", description = "Internal server error", content= @Content(examples={@ExampleObject(name="", summary="", description="", value="Internal server error")}, schema = @Schema(implementation = String.class)))
         }
     )
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        throw new NotYetImplementedException();
-        //return userService.getUser(id)
-        //        .map(user -> {
-        //            userService.delete(user);
-        //            return new ResponseEntity<>(HttpStatus.OK);
-        //        })
-        //        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<ResponseDTOWrapper<UsersResponseDTO>> deleteUser(@PathVariable Long id) {
+        // prepare
+        ResponseDTOWrapper<UsersResponseDTO> response;
+        HttpStatus resStatus;
+
+        // process
+        userService.deleteUser(id);
+        response = new ResponseDTOWrapper<>();
+        //response.setData(List.of("Delete User Success"));
+        response.setResponseMessage("Delete User Success");
+        response.setResponseStatus(ResponseStatusEnum.SUCCESS);
+        response.setOriginalStatus(HttpStatus.OK);
+        resStatus = HttpStatus.OK;
+
+        // return
+        return new ResponseEntity<>(response, resStatus);
     }
 }
