@@ -9,11 +9,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -56,6 +58,7 @@ public class UserControllerTest {
     @Test
     void givenFullyValidUser_whenCreateUser_thenShouldReturnCreated() throws Exception {
         // given
+        // testUserResponse
         when(userService.createUser(any(UsersRequestDTO.class))).thenReturn(testUserResponse);
 
         // when & then
@@ -75,7 +78,11 @@ public class UserControllerTest {
     void givenInvalidUserName_whenCreateUser_thenShouldReturnBadRequest() throws Exception {
         // given
         testUserRequest.setName("123456789101112131415");
-        // UsersRequestDTO 필드 설정
+
+        // TODO: 중첩된 예외케이스의 단위테스트는 어떻게 작성해야 하는가
+        ConstraintViolationException constraintViolationException = new ConstraintViolationException(null, null, null);
+        when(userService.createUser(any(UsersRequestDTO.class)))
+                .thenThrow(new DataIntegrityViolationException("Data integrity violation", constraintViolationException));
 
         // when & then
         mockMvc.perform(post("/api/users/")
@@ -158,7 +165,7 @@ public class UserControllerTest {
     @Test
     void givenNonExistingUserId_whenUpdateUser_thenShouldReturnNotFound() throws Exception {
         // given
-        when(userService.updateUser(eq(999L), any(UsersRequestDTO.class))).thenReturn(null);
+        when(userService.updateUser(eq(999L), any(UsersRequestDTO.class))).thenThrow(new NullPointerException());
 
         // when & then
         mockMvc.perform(put("/api/users/999")
@@ -174,6 +181,8 @@ public class UserControllerTest {
      */
     @Test
     void givenExistingUserId_whenDeleteUser_thenShouldReturnSuccess() throws Exception {
+        when(userService.deleteUser(eq(1L))).thenReturn(true);
+        
         // when & then
         mockMvc.perform(delete("/api/users/1"))
                 .andExpect(status().isOk());
@@ -186,6 +195,8 @@ public class UserControllerTest {
      */
     @Test
     void givenNonExistingUserId_whenDeleteUser_thenShouldReturnNotFound() throws Exception {
+        when(userService.deleteUser(eq(999L))).thenThrow(new NullPointerException());
+
         // when & then
         mockMvc.perform(delete("/api/users/999"))
                 .andExpect(status().isNotFound());
