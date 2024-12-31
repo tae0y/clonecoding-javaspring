@@ -67,7 +67,7 @@ public class UserServiceTest {
     @Test
     void givenInvalidUserName_whenCreateUser_thenShouldReturnBadRequest() {
         // given
-        testUserRequest.setUserName("a");
+        testUserRequest.setName("a");
         // UsersRequestDTO 필드 설정
 
         // when
