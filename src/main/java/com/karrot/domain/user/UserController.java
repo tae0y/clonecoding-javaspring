@@ -227,7 +227,8 @@ public class UserController {
         HttpStatus resStatus;
 
         // process
-        userService.deleteUser(id);
+        // TODO: resultFlag를 기준으로 삭제 성공여부 판별, 그런데 이 방식이 맞나?
+        boolean resultFlag = userService.deleteUser(id);
         response = new ResponseDTOWrapper<>();
         //response.setData(List.of("Delete User Success"));
         response.setResponseMessage("Delete User Success");

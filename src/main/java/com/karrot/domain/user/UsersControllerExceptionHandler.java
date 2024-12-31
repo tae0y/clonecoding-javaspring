@@ -95,6 +95,22 @@ public class UsersControllerExceptionHandler {
     }
 
     /**
+     * NullPointerException 예외 처리
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ResponseDTOWrapper<?>> handleNullPointerException(NullPointerException e) {
+        e.printStackTrace();
+
+        ResponseDTOWrapper<?> response = new ResponseDTOWrapper<>();
+        response.setResponseMessage("Internal server error");
+        response.setResponseStatus(ResponseStatusEnum.FAIL_INTERNAL);
+        response.setOriginalStatus(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    /**
      * Exception 예외 처리
      * 
      * - 그외 알려지지 않은 예외에 대해서는 503을 반환하기로함

@@ -72,12 +72,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long id)
+    public boolean deleteUser(Long id)
     {
         // prepare
         // process
         userRepository.deleteById(id);
 
         // return
+        return true;
     }
 }
